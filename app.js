@@ -12,7 +12,7 @@ var jsonParser = bodyParser.json()
 var db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'password',
   database: 'OOP'
 });
 
