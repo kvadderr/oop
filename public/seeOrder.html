@@ -1,0 +1,143 @@
+<html>
+    <head>
+        <title>ИС Аптека</title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/css/uikit.min.css" />
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit-icons.min.js"></script>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    </head>
+
+    <body class="uk-background-muted uk-padding">
+
+        <div class="uk-section">
+            <div class="uk-container uk-container-small uk-card-default uk-card-body">
+                <div class="uk-padding uk-section uk-section-default">
+                    <div class="uk-container">
+                        <div class="uk-child-width-1-1" uk-grid>
+                            
+                            <div>
+                                <div class="">
+                                    <ul class="uk-breadcrumb">
+                                        <li><a href="index.html">Главная</a></li>
+                                        <li><span>Просмотр заказов</span></li>
+                                    </ul>
+
+                                </div>
+                                                   
+                                <div class="uk-margin">
+                                    <select class='uk-select' id = 'clientSelect'>
+                                    </select>
+                                </div>
+
+                                <button class="uk-button uk-button-default" onclick="loadOrder()">Загрузить заказы клиента</button>
+
+                                <div class="uk-margin">
+                                    <select class='uk-select' id = 'productSelect'>
+                                    </select>
+                                </div>
+
+                                <button class="uk-button uk-button-default" onclick="loadBasket()">Загрузить корзину заказа</button>
+                                
+                                
+                                <div class="uk-container">
+                                    <table class="uk-table uk-table-striped" id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Название продукта</th>
+                                                <th>Количество</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stockTableBody">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                
+               
+            </div>
+            
+        </div>
+
+        
+    <script src="client.js"></script>
+    <script src="product.js"></script>
+    <script src="basket.js"></script>
+    <script src="order.js"></script>
+    <script>
+        const url =  new URL("http://localhost:3000/");
+        //Поиск элементов
+        const clientSelect = document.getElementById("clientSelect");
+        const stockTableBody = document.getElementById("stockTableBody");
+        const catName = document.getElementById("catName");
+        const priceProduct = document.getElementById("priceProduct");
+        const productSelect = document.getElementById("productSelect");
+        const countProduct = document.getElementById("countProduct");
+        let clientItem = [];
+        let productItem = [];
+        let basketItem = [];
+
+        var i = 0;
+
+        loadData();
+
+        function loadData(){
+
+            clientSelect.innerHTML = "";
+
+            fetch(url + "client").then(function(response) {
+                response.json().then(function(data) {
+                    for (var i=0; i<data.length; i++){
+                        clientItem[i] = new Client(data[i].id_client, data[i].FIO, data[i].phone);
+                        clientItem[i].fillCombobox(clientSelect);
+                    }      
+                });
+            });
+        }   
+
+        function loadOrder(){
+            
+            productSelect.innerHTML = "";
+
+            fetch(url + "order?id_client=" + clientSelect.value).then(function(response) {
+                response.json().then(function(data) {
+                    for (var i=0; i<data.length; i++){
+                        productItem[i] = new Order(data[i].id_orders,data[i].id_client, data[i].name);
+                        productItem[i].fillCombobox(productSelect);
+                        console.log(productItem[i]);
+                    }      
+                });
+            });
+        }   
+        
+        function loadBasket(){
+            
+            stockTableBody.innerHTML = "";
+            console.log(productSelect.value);
+
+            fetch(url + "basket?id_order=" + productSelect.value).then(function(response) {
+                response.json().then(function(data) {
+                    for (var i=0; i<data.length; i++){
+                        basketItem[i] = new Basket(data[i].id_order,data[i].id_client,data[i].count, data[i].name);
+                        basketItem[i].getCat(stockTableBody);
+                        console.log(productItem[i]);
+                    }      
+                });
+            });
+        }   
+
+     
+    </script>
+
+    </body>
+
+</html>

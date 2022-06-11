@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <title>ИС Аптека</title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/css/uikit.min.css" />
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit-icons.min.js"></script>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    </head>
+
+    <body class="uk-background-muted uk-padding">
+
+        <div class="uk-section">
+            <div class="uk-container uk-container-small uk-card-default uk-card-body">
+                <div class="uk-padding uk-section uk-section-default">
+                    <div class="uk-container">
+                        <div class="uk-child-width-1-1" uk-grid>
+                            
+                            <div>
+                                <div class="">
+                                    <ul class="uk-breadcrumb">
+                                        <li><a href="index.html">Главная</a></li>
+                                        <li><span>Оформление заказа</span></li>
+                                    </ul>
+
+                                </div>
+                                                                 
+                                <div class="uk-margin">
+                                    <select class='uk-select' id = 'productSelect'>
+                                    </select>
+                                </div>
+
+                                <div class="uk-margin">
+                                    <input class="uk-input" id="countProduct" type="text" placeholder="Количество">
+                                </div>
+
+                                <button class="uk-button uk-button-default" onclick="addToTable()">Добавить в корзину</button>
+
+                                <div class="uk-container">
+                                    <table class="uk-table uk-table-striped" id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Название продукта</th>
+                                                <th>Количество</th>
+                                                <th>Удалить</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stockTableBody">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="uk-margin">
+                                    <select class='uk-select' id = 'categorySelect'>
+                                    </select>
+                                </div>
+
+                                <div class="uk-margin">
+                                    <input class="uk-input" id="catName" type="text" placeholder="Название">
+                                </div>
+
+
+                                <button class="uk-button uk-button-default" onclick="changeSelect()">Загрузить</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                
+               
+            </div>
+            
+        </div>
+
+        
+    <script src="client.js"></script>
+    <script src="product.js"></script>
+    <script src="basket.js"></script>
+    <script>
+        const url =  new URL("http://localhost:3000/");
+        //Поиск элементов
+        const selectCategory = document.getElementById("categorySelect");
+        const stockTableBody = document.getElementById("stockTableBody");
+        const catName = document.getElementById("catName");
+        const priceProduct = document.getElementById("priceProduct");
+        const productSelect = document.getElementById("productSelect");
+        const countProduct = document.getElementById("countProduct");
+        let clientItem = [];
+        let productItem = [];
+        let basketItem = [];
+
+        var i = 0;
+
+        loadData();
+        loadProduct();
+
+        function loadData(){
+
+            selectCategory.innerHTML = "";
+
+            fetch(url + "client").then(function(response) {
+                response.json().then(function(data) {
+                    for (var i=0; i<data.length; i++){
+                        clientItem[i] = new Client(data[i].id_client, data[i].FIO, data[i].phone);
+                        clientItem[i].fillCombobox(selectCategory);
+                    }      
+                });
+            });
+        }   
+
+        function loadProduct(){
+            
+            productSelect.innerHTML = "";
+
+            fetch(url + "allProduct").then(function(response) {
+                response.json().then(function(data) {
+                    for (var i=0; i<data.length; i++){
+                        productItem[i] = new Product(data[i].id_product, data[i].name, data[i].price, data[i].id_category);
+                        productItem[i].fillCombobox(productSelect);
+                        console.log(productItem[i]);
+                    }      
+                });
+            });
+        }           
+
+        function addToTable(){
+            basketItem[i] = new Basket(i, productSelect.value, countProduct.value, productSelect.options[productSelect.selectedIndex].text);
+            basketItem[i].fillTable(stockTableBody);
+            i++;
+        }
+
+        function changeSelect(){
+            var data = {"basketArr": basketItem, "id_client": selectCategory.value, "name": catName.value}
+            console.log(data);
+            fetch (url + 'order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            stockTableBody.innerHTML = "";
+            alert("Заказ оформлен!");
+        }
+       
+    </script>
+
+    </body>
+
+</html>

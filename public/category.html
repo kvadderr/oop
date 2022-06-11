@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <title>ИС Аптека</title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/css/uikit.min.css" />
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit-icons.min.js"></script>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    </head>
+
+    <body class="uk-background-muted uk-padding">
+
+        <div class="uk-section">
+            <div class="uk-container uk-container-small uk-card-default uk-card-body">
+                <div class="uk-padding uk-section uk-section-default">
+                    <div class="uk-container">
+                        <div class="uk-child-width-1-2" uk-grid>
+                            
+                            <div>
+                                <div class="">
+                                    <ul class="uk-breadcrumb">
+                                        <li><a href="index.html">Главная</a></li>
+                                        <li><span>Категории</span></li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-padding uk-section uk-section-default">
+                    <div class="uk-container">
+                        <ul class="uk-tab-bottom" uk-tab data-uk-tab="{connect:'#my-id2'}">
+                            <li class="uk-active"><a href="#">Категории</a></li>
+                            <li><a href="#">Добавить категорию</a></li>
+                        </ul>
+
+                        <ul class="uk-switcher uk-margin" id="my-id2">
+                            <li>
+                                <div class="uk-container">
+                                    <table class="uk-table uk-table-striped" id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Название категории</th>
+                                                <th>Удалить</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stockTableBody">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="uk-container">
+                                   
+                                    <div class="uk-margin">
+                                        <input class="uk-input" id="catName" type="text" placeholder="Название категории">
+                                    </div>
+
+                                    <a class="uk-button uk-button-secondary uk-width-1-1 uk-margin-small-bottom" onclick="newCategory()">Добавить категорию</a>
+                                                                        
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        
+    <script src="category.js"></script>
+    <script>
+        const url =  new URL("http://localhost:3000/");
+        //Поиск элементов
+        const stockTableBody = document.getElementById("stockTableBody");
+        const catName = document.getElementById("catName");
+        let categoryItem = [];
+
+        loadData();
+
+        function loadData(){
+
+            fetch(url + "category").then(function(response) {
+                response.json().then(function(data) {
+                    for (var i=0; i<data.length; i++){
+                        categoryItem[i] = new Category(data[i].id_category, data[i].name);
+                        categoryItem[i].fillTable(stockTableBody);
+                    }      
+                });
+            });
+        }   
+
+
+        function deleteCategory(id_category){
+
+            var data = {"id_category":id_category}
+            console.log(data);
+            fetch (url + 'category', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            stockTableBody.innerHTML="";
+            loadData();
+        }
+
+        function newCategory(){
+            
+            var data = {"name": catName.value}
+            console.log(data);
+            fetch (url + 'category', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            stockTableBody.innerHTML = "";
+            loadData();
+        }
+        
+       
+    </script>
+
+    </body>
+
+</html>

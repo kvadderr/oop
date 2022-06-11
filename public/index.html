@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <title>ИС</title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/css/uikit.min.css" />
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.1/dist/js/uikit-icons.min.js"></script>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    </head>
+
+    <body class="uk-background-muted uk-padding">
+        <div class="uk-section">
+            <div class="uk-container uk-container-small uk-card-default uk-card-body">
+                <div class="uk-padding uk-section uk-section-default">
+                    <div class="uk-container">
+                        <div class="uk-child-width-1-2" uk-grid>
+                            <div>
+                                <h3 class="uk-text-bold">Система продажи товара</h3>
+                                <div class="">
+                                    <ul class="uk-list uk-list-bullet">
+                                        <li>Учет категорий</li>
+                                        <li>Ведение списка продуктов</li>
+                                        <li>Оформление продажи</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div>
+                                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_jcsfwbvi.json"  background="transparent"  speed="1"  style="width: 350px; height: 300px;"  loop  autoplay></lottie-player>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>        
+
+                <div class="uk-padding uk-section uk-section-default">
+                    <div class="uk-container">
+                        <div class="uk-child-width-1-2@s uk-grid-match" uk-grid>
+                            <div>
+                                <div class="uk-card uk-card-default uk-card-hover uk-card-body">
+                                    <h3 class="uk-card-title">Категории</h3>
+                                    <p>Управляйте категориями, добавляя, изменяя и удаляя их.</p>
+                                    <a href="category.html" class="uk-button uk-button-text">Перейти</a>
+                                </div>
+                                
+                            </div>
+                            <div>
+                                <div class="uk-card uk-card-default uk-card-hover uk-card-body">
+                                    <h3 class="uk-card-title">Продукты</h3>
+                                    <p>Ведите учет продуктов, указывайте категорию и присваивайте цены.</p>
+                                    <a href="product.html" class="uk-button uk-button-text">Перейти</a>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-card uk-card-primary uk-card-hover uk-card-body uk-light">
+                                    <h3 class="uk-card-title">Клиенты</h3>
+                                    <p>Добавьте данные клиентов для последующего оформления заказа.</p>
+                                    <a href="client.html" class="uk-button uk-button-text">Перейти</a>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-light">
+                                    <h3 class="uk-card-title">Оформить заказ</h3>
+                                    <p>Соберите корзину, выберите пользователя и оформите заказ.</p>
+                                    <a href="order.html" class="uk-button uk-button-text">Далее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="./logic.js"></script>
+    </body>
+
+
+</html>
